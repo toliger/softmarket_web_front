@@ -1,0 +1,6 @@
+query getsubcategories ($categorie: String!){
+  sub_categories (categorie: $categorie){
+    name
+    description
+  }
+}

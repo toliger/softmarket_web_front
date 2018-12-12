@@ -28,32 +28,32 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <router-link class="nav-link" to="/shop/office"
+              <router-link class="nav-link" to="/shop/Office"
                 >OFFICE</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/shop/multimedia"
+              <router-link class="nav-link" to="/shop/Multimedia"
                 >MULTIMEDIA</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/shop/design"
+              <router-link class="nav-link" to="/shop/Design"
                 >DESIGN</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/shop/developer"
+              <router-link class="nav-link" to="/shop/Developer"
                 >DEVELOPER</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" to="/shop/utilities"
+              <router-link class="nav-link" to="/shop/Utilities"
                 >UTILITIES</router-link
               >
             </li>
             <li class="nav-item">
-              <router-link class="nav-link" href="/shop/games"
+              <router-link class="nav-link" to="/shop/Games"
                 >GAMES</router-link
               >
             </li>

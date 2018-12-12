@@ -1,0 +1,6 @@
+query getarticles ($categorie: String!, $subCategorie: String!){
+  articles (categorie: $categorie, subCategorie: $subCategorie){
+    name
+    description
+  }
+}
