@@ -1,0 +1,3 @@
+query estimate ($country: String!, $state: String!) {
+  estimate(country: $country, state: $state)
+}

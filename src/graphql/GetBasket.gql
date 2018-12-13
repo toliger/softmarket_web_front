@@ -1,0 +1,19 @@
+query getbasket {
+  basket {
+    articles {
+      id
+      amount
+      name
+      price
+    }
+    coupons{
+      id
+      price
+      name
+    }
+    
+    articles_price
+    coupons_reduc
+    total
+  }
+}

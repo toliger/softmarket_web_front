@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
+import { users } from "./users.module";
+import { auth } from "./auth.module";
 
 const vuexPersist = new VuexPersist({
   key: "my-app",
@@ -10,6 +12,10 @@ const vuexPersist = new VuexPersist({
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    users,
+    auth
+  },
   state: {
     basket: []
   },
@@ -26,9 +32,7 @@ export default new Vuex.Store({
     removearticle(state, payload) {
       let res = [];
       for (let i in state.basket) {
-        if (state.basket[i].id == payload) state.basket[i].amount--;
-
-        if (state.basket[i].amount > 0) res.push(state.basket[i]);
+        if (state.basket[i].id != payload) res.push(state.basket[i]);
       }
       state.basket = res;
     }

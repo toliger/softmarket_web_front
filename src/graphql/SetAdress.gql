@@ -1,0 +1,3 @@
+mutation addArticle ($name: String!) {
+  addarticle_basket (uuid: $name)
+}

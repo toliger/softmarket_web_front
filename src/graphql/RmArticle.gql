@@ -1,0 +1,3 @@
+mutation rmArticle ($name: String!) {
+  rmarticle_basket (uuid: $name)
+}

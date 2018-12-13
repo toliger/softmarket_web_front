@@ -7,7 +7,8 @@
           <a>Live chat with Us</a>
         </div>
         <div id="account" class="col-3 offset-6 row justify-content-end">
-          <div>My account</div>
+          <router-link to="/dashboard" v-if="isLogged">My account</router-link>
+          <div v-else> <NavLinks /> </div>
           <router-link to="/cards">My cards <p
             v-if="this.$store.state.basket.length">({{this.$store.state.basket.length}})</p></router-link>
         </div>
@@ -81,8 +82,19 @@
 </template>
 
 <script>
+import NavLinks from "@/components/NavLinks";
+import { mapGetters } from "vuex";
 export default {
   name: "App",
+  components: {
+    NavLinks
+  },
+  computed: {
+    ...mapGetters({
+      isLogged: "auth/isLoggedIn",
+      user: "auth/user"
+    })
+  },
   data() {
     return {
       //

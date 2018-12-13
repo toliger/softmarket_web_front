@@ -1,98 +1,100 @@
 <template lang="html">
   <section id="cards">
     <v-container> <h1>Catégories</h1>
-              <div class="header">
-                <div>Nom</div>
-                <div>Quantité</div>
-                <div>Prix</div>
-              </div>
-      <div v-for="(article, index) in $store.state.basket" v-bind:key="article.id">
-        <ApolloQuery
-          :query="require('@/graphql/GetArticle.gql')"
-          :variables="{ uuid: article.id, amount: article.amount}"
-        >
-          <template slot-scope="{ result: { loading, error, data } }">
-            <!-- Loading -->
-            <div v-if="loading" class="loading apollo">Loading...</div>
-
-            <!-- Error -->
-            <div v-else-if="error" class="error apollo">An error occured</div>
-
-            <div v-else-if="!data" class="no-result apollo">No result :(</div>
-
-            <!-- Result -->
-              <div v-else class="item">
-            {{ addprice(data.article.id, data.article.price) }}
-                <div>{{ data.article.name }} </div>
-                <div class="del">
-                  <p v-if="data.article.amount == -1">Rupture de Stock</p>
-                  <p v-else>{{ $store.state.basket[index].amount }}</p>
-                <button v-on:click="removearticle(data.article.id)">Supprimer</button>
-                </div>
-                <div>
-                  {{ $store.state.basket[index].amount * data.article.price }} €
-                </div>
-              </div>
-
-          </template>
-        </ApolloQuery>
-      </div>
+      <table>
+        <tr>
+          <th>Nom du produit</th>
+          <th>Quantité</th>
+          <th>Prix</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+        <tr v-for="a in basket.articles" v-bind:key="a.name">
+          <td>{{ a.name }}</td>
+          <td>{{ a.amount }}</td>
+          <td>{{ a.price }} €</td>
+          <td>{{ a.price * a.amount }} €</td>
+          <td><button v-on:click="supprimer(a.id, a.name)">Supprimer</button></td>
+        </tr>
+      </table>
       <div id="more">
-        <div id="estimate">
+        <div id="estimate" class="el">
           <h3>Estimation des frais de port</h3>
+          <p v-if="fdp">Les frais de ports d'élèvent à {{ fdp }}
           <p>Entrez une destination</p>
           <label for="country">Pays</label>
-          <input name="country" v-model="estimate.country" placeholder="Pays">
+          <input name="country" v-model="adress.country" placeholder="Pays">
           <label for="region">Region</label>
-          <input name="region" v-model="estimate.state" placeholder="Region">
+          <input name="region" v-model="adress.state" placeholder="Region">
           <label for="zipcode">Code Postal</label>
-          <input v-model="estimate.zipcode" placeholder="edit me">
+          <input v-model="adress.zipcode" placeholder="edit me">
           <button v-on:click="estim()">Estimer</button>
         </div>
-        <div id="reduction">
+        <div id="reduction" class="el">
           <h3>Coupon de reduction</h3>
           <p>Entrez un coupon de reduction</p>
-          <input v-model="reduction">
-          <button v-on:click="reduct()">Appliquer</button>
+          <input v-model="reduction" placeholder="Entrez le nom du coupon">
+          <button v-on:click="addCoupon()">Appliquer</button>
         </div>
-        <div id="total">
+        <div id="total" class="el">
           <h3>Total</h3>
           <div>
             <p>Articles</p>
-            <p>230€</p>
+            <p>{{ basket.articles_price }} €</p>
           </div>
           <div>
-            <p>Coupon</p>
-            <p>100€</p>
+            <p>Coupons</p>
+            <ul>
+            <li v-for="c in basket.coupons" v-bind:key="c.name">
+              {{ c.price  }}<button v-on:click="supprimerCoupon(c.name)">-</button>
+            </li>
+            </ul>
+            <label>Total des coupons</label>
+            <p>- {{ basket.coupons_reduc }} €</p>
           </div>
           <div>
             <p>Total</p>
-            <p>20$</p>
+            <p>{{ basket.total }} €</p>
           </div>
+      <div id="buy"><router-link to="/step1">Passer la commande</router-link></div>
         </div>
       </div>
-      <div id="buy"><router-link to="/step1">Passer la commande</router-link></div>
     </v-container>
   </section>
 </template>
 
 <script lang="js">
 import { mapActions } from 'vuex'
+import GETBASKET from "@/graphql/GetBasket.gql";
+import RMARTICLE from "@/graphql/RmArticle.gql";
+import SETADRESS from "@/graphql/SetAdress.gql";
+import ADDCOUPON from "@/graphql/AddCoupon.gql";
+import RMCOUPON from "@/graphql/RmCoupon.gql";
+import ESTIMATE from "@/graphql/Estimate.gql";
   export default  {
     name: 'home-page',
     props: [],
     mounted() {
-
+      this.$apollo.queries.basket.refetch()
     },
     data() {
       return {
-        estimate: {
+        adress: {
           country: "",
           state: "",
-          zipcode: ""
+          zipcode: "",
+          ville: "",
+          num: "",
+          rue: ""
         },
-        prices: []
+        fdp: null,
+        reduction: "",
+        prices: [],
+        basket: {}
       }
+    },
+    apollo: {
+      basket: GETBASKET
     },
     methods: {
       ...mapActions([
@@ -101,9 +103,64 @@ import { mapActions } from 'vuex'
       addprice(uuid, price) {
         this.prices.push({uuid, price});
       },
-      estim() {
+      async supprimer(uuid, name) {
+        this.removearticle(uuid);
+        await this.$apollo.mutate({
+        // Query
+        mutation: RMARTICLE,
+        // Parameters
+        variables: {
+          name: name,
+        },
+        });
+        this.$apollo.queries.basket.refetch()
       },
-      reduct() {
+      async addCoupon() {
+        await this.$apollo.mutate({
+        // Query
+        mutation: ADDCOUPON,
+        // Parameters
+        variables: {
+          name: this.reduction,
+        },
+        });
+        this.$apollo.queries.basket.refetch()
+      },
+      async supprimerCoupon(name) {
+        await this.$apollo.mutate({
+        // Query
+        mutation: RMCOUPON,
+        // Parameters
+        variables: {
+          name: name,
+        },
+        });
+        this.$apollo.queries.basket.refetch()
+      },
+      async estim() {
+        this.fdp = (await this.$apollo.query({
+        // Query
+        query: ESTIMATE,
+        // Parameters
+          variables: {
+            country: this.adress.country,
+            state: this.adress.state
+          }
+        })).data.estimate;
+
+        this.$apollo.queries.basket.refetch()
+      },
+      async reduct() {
+         await this.$apollo.mutate({
+        // Query
+        mutation: ADDCOUPON,
+        // Parameters
+        variables: {
+          name: this.reduction,
+        },
+        });
+
+        this.$apollo.queries.basket.refetch()
       }
     },
     computed: {
@@ -114,6 +171,9 @@ import { mapActions } from 'vuex'
 
 <style scoped lang="less">
 #cards {
+  table {
+    width: 100%;
+  }
   .header {
     display: flex;
     justify-content: space-between;
@@ -122,6 +182,19 @@ import { mapActions } from 'vuex'
   #more {
     display: flex;
     flex-direction: row;
+    .el {
+      margin: 5vh 3vw 0 3vw;
+      border: 1px solid gray;
+      flex: 1;
+
+      h3 {
+        background-color: gray;
+      }
+
+      p {
+        padding: 1vh;
+      }
+    }
     #estimate {
       display: flex;
       flex-direction: column;

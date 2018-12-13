@@ -71,7 +71,7 @@
                     <h3>{{article.name}}</h3>
                     <p>{{article.description}}</p>
                     <p>{{article.price}} €</p>
-                    <button v-on:click="addarticle(article.id)">Acheter</button>
+                    <button v-on:click="addaarticle(article.id, article.name)">Acheter</button>
                   </div>
                 </v-container>
 
@@ -88,6 +88,7 @@
 
 <script lang="js">
 import { mapActions } from 'vuex'
+import ADDARTICLE from "@/graphql/AddArticle.gql";
   export default  {
     name: 'shop',
     props: [],
@@ -101,8 +102,19 @@ import { mapActions } from 'vuex'
     methods: {
       ...mapActions([
             'addarticle'
-        ])
-
+        ]),
+      async addaarticle(uuid, name) {
+        this.$apollo.mutate({
+        // Query
+        mutation: ADDARTICLE,
+        // Parameters
+        variables: {
+          name: name,
+        },
+        }).then(() => {
+          this.addarticle(uuid);
+        });
+      }
     },
     computed: {
 

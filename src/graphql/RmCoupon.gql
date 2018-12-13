@@ -1,0 +1,3 @@
+mutation rmCoupon ($name: String!) {
+  rmcoupon_basket (uuid: $name)
+}
