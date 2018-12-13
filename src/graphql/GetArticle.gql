@@ -1,0 +1,8 @@
+query article ($uuid: String!, $amount: Int!){
+  article (uuid: $uuid, amount: $amount){
+    id
+    name
+    amount
+    price
+  }
+}

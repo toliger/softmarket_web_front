@@ -8,7 +8,8 @@
         </div>
         <div id="account" class="col-3 offset-6 row justify-content-end">
           <div>My account</div>
-          <div>My cards</div>
+          <router-link to="/cards">My cards <p
+            v-if="this.$store.state.basket.length">({{this.$store.state.basket.length}})</p></router-link>
         </div>
       </header>
       <div id="menu" class="navbar navbar-expand-lg navbar-light">

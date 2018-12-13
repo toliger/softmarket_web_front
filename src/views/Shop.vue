@@ -70,7 +70,8 @@
                     <img class="img" src="@/assets/img/article.png">
                     <h3>{{article.name}}</h3>
                     <p>{{article.description}}</p>
-                    <button>Acheter</button>
+                    <p>{{article.price}} €</p>
+                    <button v-on:click="addarticle(article.id)">Acheter</button>
                   </div>
                 </v-container>
 
@@ -86,6 +87,7 @@
 </template>
 
 <script lang="js">
+import { mapActions } from 'vuex'
   export default  {
     name: 'shop',
     props: [],
@@ -97,6 +99,9 @@
       }
     },
     methods: {
+      ...mapActions([
+            'addarticle'
+        ])
 
     },
     computed: {
@@ -130,7 +135,7 @@
 
   h3 {
     text-align: center;
-    font-size: 1.5em;
+    font-size: 1.1em;
   }
 }
 

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Shop from "./views/Shop.vue";
+import Cards from "./views/Cards.vue";
 
 Vue.use(Router);
 
@@ -21,8 +22,13 @@ export default new Router({
     },
     {
       path: "/shop/:id/:subid",
-      name: "subshop",
+      name: "Subshop",
       component: Shop
+    },
+    {
+      path: "/cards",
+      name: "Cards",
+      component: Cards
     },
     {
       path: "/about",
