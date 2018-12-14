@@ -4,12 +4,22 @@
       <h2>Mes dernière commandes</h2>
       <table>
         <tr>
-          <th>Date<th>
-              <th>Contenu</th>
+          <th>Date</th>
+          <th>Nom</th>
+          <th>Contenu</th>
+          <th>Frais de port</th>
+          <th>Total</th>
+          <th>Adresse</th>
+          <th>Moyen de payement</th>
         </tr>
-        <tr v-for="c in commandes" v-bind:key="c.id">
-          <td>{{ c.date }}</td>
-          <td>{{ c.articles }}</td>
+        <tr v-for="c in commands" v-bind:key="c.id">
+          <td>{{ c.created_at }}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.name }}</td>
+          <td>{{ c.fdp }}</td>
+          <td>{{ c.total }}</td>
+          <td>{{ c.adress }}</td>
+          <td>{{ c.payment }}</td>
         </tr>
       </table>
     </v-container>
@@ -22,15 +32,15 @@ import GETCOMMANDES from "@/graphql/GetCommandes.gql";
     name: 'home-page',
     props: [],
     mounted() {
-      this.$apollo.queries.basket.refetch()
+      this.$apollo.queries.commands.refetch()
     },
     data() {
       return {
-        commandes: [],
+        commands: [],
       }
     },
     apollo: {
-      commandes: GETCOMMANDES
+      commands: GETCOMMANDES
     },
     methods: {
     },

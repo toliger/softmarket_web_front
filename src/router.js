@@ -4,6 +4,7 @@ import Home from "./views/Home.vue";
 import Shop from "./views/Shop.vue";
 import Cards from "./views/Cards.vue";
 import Dashboard from "./views/Dashboard.vue";
+import Command from "./views/Command.vue";
 
 Vue.use(Router);
 
@@ -35,6 +36,11 @@ export default new Router({
       path: "/dashboard",
       name: "Dashboard",
       component: Dashboard
+    },
+    {
+      path: "/command",
+      name: "Command",
+      component: Command
     },
     {
       path: "/about",

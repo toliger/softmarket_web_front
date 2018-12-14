@@ -56,7 +56,7 @@
             <p>Total</p>
             <p>{{ basket.total }} €</p>
           </div>
-      <div id="buy"><router-link to="/step1">Passer la commande</router-link></div>
+      <div id="buy"><router-link to="/command">Passer la commande</router-link></div>
         </div>
       </div>
     </v-container>

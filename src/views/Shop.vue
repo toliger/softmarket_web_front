@@ -65,13 +65,18 @@
                 <div v-else-if="error" class="error apollo">An error occured</div>
 
                 <!-- Result -->
-                <v-container v-else-if="data">
+                <v-container id="its" v-else-if="data">
                   <div v-for="article in data.articles" v-bind:key="article.name" class="card">
                     <img class="img" src="@/assets/img/article.png">
                     <h3>{{article.name}}</h3>
-                    <p>{{article.description}}</p>
                     <p>{{article.price}} €</p>
-                    <button v-on:click="addaarticle(article.id, article.name)">Acheter</button>
+                    <v-rating class="rate" v-model="rating"></v-rating>
+                    <div>
+                      <button v-on:click="addaarticle(article.id,
+                      article.name)"><img src="@/assets/img/atc.png"></button>
+                      <img src="@/assets/img/fleche.png">
+                      <img src="@/assets/img/truc.png">
+                    </div>
                   </div>
                 </v-container>
 
@@ -123,18 +128,25 @@ import ADDARTICLE from "@/graphql/AddArticle.gql";
 </script>
 
 <style scoped lang="less">
+#its {
+  width: 800px;
+}
 .card {
   display: flex;
   flex-direction: column;
-  background-color: red;
   float: left;
-  width: 25%;
-  height: 30vh;
-  margin-right: 5%;
+  width: 230px;
+  height: 367px;
+  margin-left: -1vw;
+  margin-right: 3vw;
   justify-content: space-between;
 
+  .rate {
+    width: 100%;
+    height: 50px;
+  }
+
   img {
-    height: 50%;
   }
 
   p {
@@ -152,7 +164,7 @@ import ADDARTICLE from "@/graphql/AddArticle.gql";
 }
 
 .card:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
   animation: 2s transform;
 }
 </style>

@@ -1,6 +1,11 @@
-query getcommandes {
-  commandes {
+query getcommands {
+  commands {
   id
-  date
+  created_at
+  name
+  total
+  fdp
+  adress
+  payment
   }
 }

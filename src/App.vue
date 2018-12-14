@@ -7,14 +7,18 @@
           <a>Live chat with Us</a>
         </div>
         <div id="account" class="col-3 offset-6 row justify-content-end">
-          <router-link to="/dashboard" v-if="isLogged">My account</router-link>
+          <div v-if="isLogged">
+            <router-link to="/dashboard">My account</router-link>
+            <v-btn flat @click="logout">Logout</v-btn>
+          </div>
           <div v-else> <NavLinks /> </div>
-          <router-link to="/cards">My cards <p
+          <router-link id="cards" to="/cards">My cards <p
             v-if="this.$store.state.basket.length">({{this.$store.state.basket.length}})</p></router-link>
         </div>
       </header>
       <div id="menu" class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand" to="/">IMG</router-link>
+        <router-link class="navbar-brand" to="/"><img src="@/assets/img/title.png">
+        </router-link>
         <button
           class="navbar-toggler"
           type="button"
@@ -78,6 +82,21 @@
     <v-content>
       <router-view></router-view>
     </v-content>
+    <footer>
+      <div id="adds">
+        <img src="@/assets/img/down.png">
+        <img src="@/assets/img/block_math.png">
+        <img src="@/assets/img/gift.png">
+        <img src="@/assets/img/up.png">
+      </div>
+    <img src="@/assets/img/footer.png">
+    <div id="sn">
+      <img src="@/assets/img/fb.png"> <p>Facebook</p>
+      <img src="@/assets/img/tw.png"> <p>Twitter</p>
+      <img src="@/assets/img/yt.png"> <p>Youtube</p>
+      <img src="@/assets/img/rs.png"> <p>RSS</p>
+    </div>
+    </footer>
   </v-app>
 </template>
 
@@ -95,6 +114,12 @@ export default {
       user: "auth/user"
     })
   },
+  methods: {
+    logout() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/");
+    }
+  },
   data() {
     return {
       //
@@ -105,6 +130,9 @@ export default {
 
 
 <style scoped lang="less">
+#cards {
+  padding: 5px;
+}
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   nav {
@@ -112,6 +140,7 @@ export default {
     border-bottom: gray solid 1px;
     header {
       #contact {
+        margin: 5px;
       }
 
       #account {
@@ -129,6 +158,27 @@ export default {
       .item:hover {
         background-color: grey;
         animation: background-color 0.25s;
+      }
+    }
+  }
+
+  footer {
+    display: flex;
+    flex-direction: column;
+    padding: 1vh;
+
+    #adds {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+
+    #sn {
+      display: flex;
+      flex-direction: row;
+
+      p {
+        margin: auto 1vw auto 1vw;
       }
     }
   }

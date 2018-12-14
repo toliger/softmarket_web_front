@@ -1,0 +1,3 @@
+mutation sendCommand ($adress: String!, $payment: String!) {
+  command (adress: $adress, payment: $payment)
+}
